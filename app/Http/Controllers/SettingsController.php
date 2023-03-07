@@ -58,12 +58,13 @@ class SettingsController extends Controller
         return redirect()->route("settings.edit");
     }
 
-    public function update(Request $request)
+    public function update(Request $request, Google $google)
     {
         $request->validate([
             'selectedCalendars' => 'array'
         ]);
 
+        $this->getGoogleService();
 
         $googleAccount = $request->user()->googleAccounts()->first();
 
@@ -92,5 +93,14 @@ class SettingsController extends Controller
         auth()->user()->googleAccounts()->delete();
 
         return redirect()->route("settings.edit");
+    }
+
+    public function getGoogleService()
+    {
+        $token = request()->user()->googleAccounts->value('token');
+
+        return app(Google::class)
+            ->connectUsing($token)
+            ->service('Calendar');
     }
 }

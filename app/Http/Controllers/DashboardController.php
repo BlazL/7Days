@@ -36,12 +36,14 @@ class DashboardController extends Controller
             ];
         }
 
-        $cards = Card::whereBetween('started_at', [$startDate, $endDate])->get()->groupBy(function ($item) {
+        $cards = Card::whereBetween('started_at', [$startDate, $endDate])->get()->sortBy(function ($item) {
+            return NULL == $item['google_id'] ? 1 : 0;
+        })->groupBy(function ($item) {
             return $item->started_at->format('Y-m-d');
         });
 
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Index', [
             'daysOfWeek' => $week,
             'currentDay' => Carbon::now()->format('Y-m-d'),
             'title' => $title,

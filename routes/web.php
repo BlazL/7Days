@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/google/oauth', [SettingsController::class, 'store'])->name('settings.store');
     Route::patch('/settings/calendar', [SettingsController::class, 'update'])->name('settings.update');
     Route::delete('/settings/calendar', [SettingsController::class, 'destroy'])->name('settings.delete');
+
+    Route::post('/cards', [CardController::class, 'store'])->name('cards.store');
 });
 
 require __DIR__ . '/auth.php';

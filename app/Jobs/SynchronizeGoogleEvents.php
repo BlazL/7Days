@@ -51,6 +51,7 @@ class SynchronizeGoogleEvents extends SynchronizeGoogleResource implements Shoul
             $this->calendar->events()->updateOrCreate(
                 [
                     'google_id' => $googleEvent->id,
+                    'user_id' => $this->calendar->googleAccount->user_id
                 ],
                 [
                     'title' => $googleEvent->summary ?? '(No title)',

@@ -12,7 +12,7 @@ class Card extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'position', 'allday', 'started_at', 'ended_at', 'calendar_id', 'google_id',
+        'title', 'description', 'position', 'allday', 'started_at', 'ended_at', 'calendar_id', 'google_id', 'user_id', 'color'
     ];
 
     public function calendar()

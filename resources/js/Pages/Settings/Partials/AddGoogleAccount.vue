@@ -1,10 +1,5 @@
 <script setup>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-// import InputError from "@/Components/InputError.vue";
-// import InputLabel from "@/Components/InputLabel.vue";
-// import Modal from "@/Components/Modal.vue";
-// import SecondaryButton from "@/Components/SecondaryButton.vue";
-// import TextInput from "@/Components/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import { nextTick, ref } from "vue";
@@ -37,7 +32,7 @@ function isChecked(calendar) {
 
 <template>
   <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-    <section class="space-y-3">
+    <section class="space-y-3 max-w-xl">
       <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
           Google calendar sync
