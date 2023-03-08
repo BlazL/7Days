@@ -14,7 +14,7 @@ trait BelongsToTenant
         static::addGlobalScope(new TenantScope());
 
         static::creating(function ($model) {
-            $model->entity_id = session()->get("tenant_id");
+            $model->entity_id = session()->get('tenant_id');
         });
     }
 

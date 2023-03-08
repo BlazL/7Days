@@ -12,12 +12,12 @@ const showingNavigationDropdown = ref(false);
 
 <template>
   <div>
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="bg-gray-100 dark:bg-gray-900">
       <nav
         class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
       >
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
+          <div class="flex justify-between h-14">
             <div class="flex">
               <div class="shrink-0 flex items-center">
                 <Link :href="route('dashboard')">
@@ -38,7 +38,9 @@ const showingNavigationDropdown = ref(false);
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-              <Link class="text-sm" :href="route('settings.edit')"
+              <Link
+                class="text-sm dark:text-gray-400 dark:hover:text-gray-300"
+                :href="route('settings.edit')"
                 >Settings</Link
               >
               <div class="ml-3 relative">

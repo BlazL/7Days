@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Card extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'position', 'allday', 'started_at', 'ended_at', 'calendar_id', 'google_id', 'user_id', 'color'
+        'title', 'description', 'position', 'allday', 'started_at', 'ended_at', 'calendar_id', 'google_id', 'user_id', 'color',
     ];
 
     public function calendar()

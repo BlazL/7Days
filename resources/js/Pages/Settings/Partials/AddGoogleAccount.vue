@@ -55,10 +55,12 @@ function isChecked(calendar) {
       <div class="space-y-3" v-else>
         <div class="flex justify-between">
           <div>
-            <h2 class="font-medium leading-6">
+            <h2 class="font-medium leading-6 text-gray-600 dark:text-gray-400">
               Connected with Google Account:
             </h2>
-            <p class="underline">{{ props.accounts?.name }}</p>
+            <p class="underline text-gray-600 dark:text-gray-400">
+              {{ props.accounts?.name }}
+            </p>
           </div>
         </div>
       </div>
@@ -91,10 +93,10 @@ function isChecked(calendar) {
                 <div class="min-w-0 flex-1 text-sm leading-6">
                   <label
                     :for="`calendar-${calendarIdx}`"
-                    class="select-none font-medium text-gray-900"
+                    class="select-none font-medium text-gray-900 text-gray-600 dark:text-gray-400"
                     ><span
                       :style="'background-color:' + calendar.color + ';'"
-                      class="mr-2 inline-block align-middle h-4 w-4 rounded-full ring-2 ring-white"
+                      class="mr-2 inline-block align-middle h-4 w-4 rounded-full ring-2 ring-white dark:ring-gray-800"
                     ></span
                     >{{ calendar.name }}</label
                   >
@@ -105,7 +107,7 @@ function isChecked(calendar) {
                     v-model="form.selectedCalendars"
                     :id="`calendar-${calendarIdx}`"
                     type="checkbox"
-                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:bg-gray-900 dark:border-gray-900"
                   />
                 </div>
               </div>

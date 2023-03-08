@@ -21,6 +21,8 @@ abstract class SynchronizeGoogleResource
     }
 
     abstract public function getGoogleService();
+
     abstract public function getGoogleRequest($service, $options);
+
     abstract public function syncItem($item);
 }

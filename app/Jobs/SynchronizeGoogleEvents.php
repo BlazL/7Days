@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Jobs\SynchronizeGoogleResource;
 use App\Services\Google;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,9 +38,7 @@ class SynchronizeGoogleEvents extends SynchronizeGoogleResource implements Shoul
 
     public function syncItem($googleEvent)
     {
-
         if ($this->calendar->import === true) {
-
             if ($googleEvent->status === 'cancelled') {
                 return $this->calendar->events()
                     ->where('google_id', $googleEvent->id)
@@ -51,7 +48,7 @@ class SynchronizeGoogleEvents extends SynchronizeGoogleResource implements Shoul
             $this->calendar->events()->updateOrCreate(
                 [
                     'google_id' => $googleEvent->id,
-                    'user_id' => $this->calendar->googleAccount->user_id
+                    'user_id' => $this->calendar->googleAccount->user_id,
                 ],
                 [
                     'title' => $googleEvent->summary ?? '(No title)',
@@ -70,7 +67,7 @@ class SynchronizeGoogleEvents extends SynchronizeGoogleResource implements Shoul
 
     protected function isAllDayEvent($googleEvent)
     {
-        return !$googleEvent->start->dateTime && !$googleEvent->end->dateTime;
+        return ! $googleEvent->start->dateTime && ! $googleEvent->end->dateTime;
     }
 
     protected function parseDatetime($googleDatetime)

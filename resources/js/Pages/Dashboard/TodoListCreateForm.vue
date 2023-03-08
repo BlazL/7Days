@@ -5,7 +5,6 @@ import { nextTick, ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
-  list: Object,
   date: String,
 });
 const emit = defineEmits(["created"]);
@@ -53,7 +52,7 @@ function onSubmit() {
 </script>
 <template>
   <form
-    class="bg-white p-2 rounded-md shadow rounded-md border-b border-gray-300"
+    class="bg-white dark:bg-gray-800 dark:shadow-none p-2 rounded-md shadow rounded-md border-b border-gray-300 dark:border-none"
     @keydown.esc="isShowingForm = false"
     v-if="isShowingForm"
     @submit.prevent="onSubmit()"
@@ -63,7 +62,7 @@ function onSubmit() {
       v-model="form.title"
       rows="3"
       @keydown.enter.prevent="onSubmit()"
-      class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-400 focus:ring-indigo-400"
+      class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
       placeholder="Enter todo..."
     ></textarea>
 
@@ -109,7 +108,7 @@ function onSubmit() {
         Add todo
       </button>
       <button
-        class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-black rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 focus:outline-none"
+        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:text-black rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 focus:outline-none"
         type="button"
         @click="isShowingForm = false"
       >

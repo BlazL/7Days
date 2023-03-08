@@ -2,9 +2,6 @@
 
 namespace App\Listeners;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-
 class SetTenantIdInSession
 {
     /**
@@ -20,6 +17,6 @@ class SetTenantIdInSession
      */
     public function handle(object $event): void
     {
-        session()->put("tenant_id", auth()->user()->id);
+        session()->put('tenant_id', auth()->user()->id);
     }
 }

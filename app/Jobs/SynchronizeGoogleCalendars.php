@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Jobs\SynchronizeGoogleResource;
 use App\Services\Google;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

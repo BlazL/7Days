@@ -8,7 +8,7 @@ class Google
 {
     protected $client;
 
-    function __construct()
+    public function __construct()
     {
         $client = new Client();
         $client->setClientId(config('services.google.client_id'));
@@ -44,7 +44,7 @@ class Google
 
     public function __call($method, $args)
     {
-        if (!method_exists($this->client, $method)) {
+        if (! method_exists($this->client, $method)) {
             throw new \Exception("Call to undefined method '{$method}'");
         }
 

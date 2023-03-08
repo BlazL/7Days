@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Jobs\SynchronizeGoogleEvents;
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +12,10 @@ class Calendar extends Model
     use HasFactory;
 
     protected $fillable = [
-        'google_id', 'name', 'color', 'timezone', 'import'
+        'google_id', 'name', 'color', 'timezone', 'import',
     ];
 
     protected $casts = ['import' => 'boolean'];
-
 
     public function googleAccount()
     {

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Jobs\SynchronizeGoogleCalendars;
-use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

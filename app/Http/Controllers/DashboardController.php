@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
@@ -18,11 +17,10 @@ class DashboardController extends Controller
         $monthNameEnd = $endDate->translatedFormat('M Y');
 
         if ($monthNameStart !== $monthNameEnd) {
-            $title = $monthNameStart . ' - ' . $monthNameEnd;
+            $title = $monthNameStart.' - '.$monthNameEnd;
         } else {
             $title = $monthNameStart;
         }
-
 
         $week = [];
 
@@ -32,22 +30,21 @@ class DashboardController extends Controller
                 'day' => $date->translatedFormat('j. n.'),
                 'current' => $date->isToday(),
                 'weekDay' => $date->translatedFormat('l'),
-                'unFormattedDate' => $date->format('Y-m-d')
+                'unFormattedDate' => $date->format('Y-m-d'),
             ];
         }
 
         $cards = Card::whereBetween('started_at', [$startDate, $endDate])->get()->sortBy(function ($item) {
-            return NULL == $item['google_id'] ? 1 : 0;
+            return null == $item['google_id'] ? 1 : 0;
         })->groupBy(function ($item) {
             return $item->started_at->format('Y-m-d');
         });
-
 
         return Inertia::render('Dashboard/Index', [
             'daysOfWeek' => $week,
             'currentDay' => Carbon::now()->format('Y-m-d'),
             'title' => $title,
-            'cards' => $cards
+            'cards' => $cards,
         ]);
     }
 }

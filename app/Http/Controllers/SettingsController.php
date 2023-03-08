@@ -18,7 +18,6 @@ class SettingsController extends Controller
     {
         $accounts = GoogleAccount::with('calendars')->where('user_id', auth()->user()->id)->first();
 
-
         return Inertia::render('Settings/Edit', [
             'accounts' => [
                 'name' => $accounts?->name,
@@ -27,17 +26,17 @@ class SettingsController extends Controller
                         'id' => $calendar->id,
                         'name' => $calendar->name,
                         'color' => $calendar->color,
-                        'import' => $calendar->import
+                        'import' => $calendar->import,
                     ];
                 }),
-                'selectedCalendars' => $accounts?->calendars->where('import', true)->pluck('id') ?? []
+                'selectedCalendars' => $accounts?->calendars->where('import', true)->pluck('id') ?? [],
             ],
         ]);
     }
 
     public function store(Request $request, Google $google)
     {
-        if (!$request->has('code')) {
+        if (! $request->has('code')) {
             return redirect($google->createAuthUrl());
         }
 
@@ -55,19 +54,18 @@ class SettingsController extends Controller
             ]
         );
 
-        return redirect()->route("settings.edit");
+        return redirect()->route('settings.edit');
     }
 
     public function update(Request $request, Google $google)
     {
         $request->validate([
-            'selectedCalendars' => 'array'
+            'selectedCalendars' => 'array',
         ]);
 
         $this->getGoogleService();
 
         $googleAccount = $request->user()->googleAccounts()->first();
-
 
         $calendarsWhereIn = $googleAccount->calendars()->whereIn('id', $request->selectedCalendars)->get();
 
@@ -92,7 +90,7 @@ class SettingsController extends Controller
 
         auth()->user()->googleAccounts()->delete();
 
-        return redirect()->route("settings.edit");
+        return redirect()->route('settings.edit');
     }
 
     public function getGoogleService()
