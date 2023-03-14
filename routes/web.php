@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+require __DIR__ . '/auth.php';
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,11 +33,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/{card?}', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-
     Route::post('/cards', [CardController::class, 'store'])->name('cards.store');
     Route::put('/cards/{card}', [CardController::class, 'update'])->name('cards.update');
     Route::put('/cards/{card}/move', [CardController::class, 'move'])->name('cards.move');
     Route::delete('/cards/{card}', [CardController::class, 'destroy'])->name('cards.destroy');
 });
-
-require __DIR__ . '/auth.php';
