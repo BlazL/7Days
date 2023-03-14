@@ -38,7 +38,7 @@ return [
         'webhook_uri' => env('GOOGLE_WEBHOOK_URI'),
         'scopes' => [
             'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/calendar.calendars.readonly',
+            'https://www.googleapis.com/auth/calendar.readonly',
             'https://www.googleapis.com/auth/calendar.events.readonly',
         ],
         'approval_prompt' => 'force',
