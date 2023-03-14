@@ -22,7 +22,7 @@ class DashboardController extends Controller
             $title = $monthNameStart;
         }
 
-        $todos = Card::whereBetween('started_at', [$startDate, $endDate])->orderBy('position')->get()->groupBy(function ($item) {
+        $todos = Card::where('user_id', auth()->id())->whereBetween('started_at', [$startDate, $endDate])->orderBy('position')->get()->groupBy(function ($item) {
             return $item->started_at->format('Y-m-d');
         });
 
