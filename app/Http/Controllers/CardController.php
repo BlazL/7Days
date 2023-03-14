@@ -22,5 +22,47 @@ class CardController extends Controller
             'ended_at' => Carbon::createFromFormat('Y-m-d', $request->date)->addDay(1),
             'color' => $request->color === 'bg-white' ? null : $request->color,
         ]);
+
+        return redirect()->back();
+    }
+
+    public function show()
+    {
+    }
+
+    public function update(Request $request, Card $card)
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        $card->update(['title' => $request->title, 'description' => $request->description, 'color' => $request->color === 'bg-white' ? null : $request->color,]);
+
+        if (request()->has('redirectUrl')) {
+            return redirect(request('redirectUrl'));
+        }
+
+        return redirect()->back();
+    }
+
+    public function move(Request $request, Card $card)
+    {
+        $request->validate([
+            'position' => "required|numeric",
+            'day' => "required"
+        ]);
+
+        $card->update([
+            'started_at' => Carbon::createFromFormat('Y-m-d', $request->day),
+            'position' => round($request->position, 5)
+        ]);
+
+        return back();
+    }
+
+    public function destroy(Card $card)
+    {
+        $card->delete();
+        return redirect()->route('dashboard');
     }
 }

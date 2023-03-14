@@ -1,8 +1,9 @@
 <script setup>
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 import { PlusIcon } from "@heroicons/vue/20/solid";
-import { nextTick, ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { nextTick, ref, computed } from "vue";
+import { useForm, router } from "@inertiajs/vue3";
+import { store } from "@/store";
 
 const props = defineProps({
   date: String,
@@ -27,7 +28,9 @@ const colors = [
 ];
 
 const inputNameRef = ref();
-const isShowingForm = ref(false);
+const isShowingForm = computed(
+  () => props.date === store.value.listCreatingCardId
+);
 const form = useForm({
   title: "",
   color: colors[0].bgColor,
@@ -35,17 +38,21 @@ const form = useForm({
 });
 
 async function showForm() {
-  isShowingForm.value = true;
+  store.value.listCreatingCardId = props.date;
+  store.value.editingCardId = null;
   await nextTick();
+  var element = document.getElementById("listRef-" + props.date);
+  element.scrollIntoView({ block: "end" });
   inputNameRef.value.focus();
 }
 
 function onSubmit() {
   form.post(route("cards.store"), {
+    only: ["cards"],
     onSuccess: () => {
       form.reset();
       inputNameRef.value.focus();
-      emit("created");
+      emit("created", form.date);
     },
   });
 }
@@ -53,7 +60,7 @@ function onSubmit() {
 <template>
   <form
     class="bg-white dark:bg-gray-800 dark:shadow-none p-2 rounded-md shadow rounded-md border-b border-gray-300 dark:border-none"
-    @keydown.esc="isShowingForm = false"
+    @keydown.esc="store.listCreatingCardId = null"
     v-if="isShowingForm"
     @submit.prevent="onSubmit()"
   >
@@ -110,7 +117,7 @@ function onSubmit() {
       <button
         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:text-black rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 focus:outline-none"
         type="button"
-        @click="isShowingForm = false"
+        @click="store.listCreatingCardId = null"
       >
         Cancel
       </button>

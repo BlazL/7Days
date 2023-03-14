@@ -8,7 +8,7 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Card $card = null)
     {
         $startDate = Carbon::today()->startOfWeek();
         $endDate = Carbon::today()->endOfWeek();
@@ -17,12 +17,17 @@ class DashboardController extends Controller
         $monthNameEnd = $endDate->translatedFormat('M Y');
 
         if ($monthNameStart !== $monthNameEnd) {
-            $title = $monthNameStart.' - '.$monthNameEnd;
+            $title = $monthNameStart . ' - ' . $monthNameEnd;
         } else {
             $title = $monthNameStart;
         }
 
+        $todos = Card::whereBetween('started_at', [$startDate, $endDate])->orderBy('position')->get()->groupBy(function ($item) {
+            return $item->started_at->format('Y-m-d');
+        });
+
         $week = [];
+        $cards = [];
 
         for ($i = 0; $i < 7; $i++) {
             $date = $startDate->copy()->addDays($i);
@@ -32,19 +37,15 @@ class DashboardController extends Controller
                 'weekDay' => $date->translatedFormat('l'),
                 'unFormattedDate' => $date->format('Y-m-d'),
             ];
+            $cards[$date->format('Y-m-d')] = $todos[$date->format('Y-m-d')] ?? [];
         }
 
-        $cards = Card::whereBetween('started_at', [$startDate, $endDate])->get()->sortBy(function ($item) {
-            return null == $item['google_id'] ? 1 : 0;
-        })->groupBy(function ($item) {
-            return $item->started_at->format('Y-m-d');
-        });
-
         return Inertia::render('Dashboard/Index', [
-            'daysOfWeek' => $week,
+            'week' => $week,
             'currentDay' => Carbon::now()->format('Y-m-d'),
             'title' => $title,
             'cards' => $cards,
+            'card' => $card
         ]);
     }
 }

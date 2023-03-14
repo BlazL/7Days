@@ -1,8 +1,11 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TodoListCreateForm from "@/Pages/Dashboard/TodoListCreateForm.vue";
-import { Head } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
+import CardListItem from "@/Pages/Dashboard/CardListItem.vue";
+import CardListItemModal from "@/Pages/Dashboard/CardListItemModal.vue";
+import { Head, router } from "@inertiajs/vue3";
+import { onMounted, ref, watch } from "vue";
+import Draggable from "vuedraggable";
 
 import {
   DotsHorizontalIcon,
@@ -11,13 +14,14 @@ import {
 } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
-  cards: Object,
-  daysOfWeek: Object,
+  week: Object,
   currentDay: String,
   title: String,
+  cards: Object,
+  card: Object,
 });
 
-const listRef = ref();
+const cards = ref(props.cards);
 
 onMounted(() => {
   document.getElementById(props.currentDay).scrollIntoView({
@@ -27,8 +31,39 @@ onMounted(() => {
   });
 });
 
-function onCardCreated() {
-  listRef.value.scrollTop = listRef.value.scrollHeight;
+watch(
+  () => props.cards,
+  (newCards) => (cards.value = newCards)
+);
+
+const onCardCreated = (elementId) => {
+  var element = document.getElementById("listRef-" + elementId);
+  element.scrollIntoView({ block: "end" });
+};
+
+function onChange(day, e) {
+  let item = e.added || e.moved;
+
+  if (!item) return;
+  let index = item.newIndex;
+  let prevCard = cards.value[day][index - 1];
+  let nextCard = cards.value[day][index + 1];
+  let card = cards.value[day][index];
+
+  let position = card.position;
+
+  if (prevCard && nextCard) {
+    position = (prevCard.position + nextCard.position) / 2;
+  } else if (prevCard) {
+    position = prevCard.position + prevCard.position / 2;
+  } else if (nextCard) {
+    position = nextCard.position / 2;
+  }
+
+  router.put(route("cards.move", { card: card.id }), {
+    position: position,
+    day: day,
+  });
 }
 </script>
 
@@ -43,7 +78,7 @@ function onCardCreated() {
       <div id="board" class="flex-1 overflow-y-hidden mt-4">
         <div class="inline-flex h-full items-start px-4 space-x-4">
           <div
-            v-for="(day, index) in daysOfWeek"
+            v-for="(day, index) in week"
             :key="index"
             :id="day.unFormattedDate"
             :class="
@@ -73,35 +108,32 @@ function onCardCreated() {
               ></div>
             </div>
             <div class="overflow-auto">
-              <div ref="listRef" class="px-3 flex-1 overflow-y-auto">
-                <ul class="space-y-3">
-                  <li
-                    v-for="(item, index) in cards[day.unFormattedDate]"
-                    :key="index"
-                    class="group relative bg-white dark:bg-gray-800 dark:hover:bg-gray-700 p-3 dark:shadow-none rounded-md border-b border-gray-300 dark:border-none hover:bg-gray-50"
-                  >
-                    <a href="#" class="text-sm dark:text-gray-400"
-                      ><span
-                        v-if="item.color"
-                        class="h-3 w-3 inline-block rounded-full mr-1 align-middle"
-                        :class="item.color"
-                      ></span
-                      >{{ item.title }}</a
-                    >
-                    <button
-                      class="hidden absolute top-1 right-1 w-8 h-8 bg-gray-50 dark:border-gray-700 dark:bg-transparent group-hover:grid place-content-center rounded-md text-gray-600 dark:hover:text-gray-300 dark:text-gray-400 hover:text-black dark:hover:bg-gray-800 hover:bg-gray-200"
-                    >
-                      <PencilIcon class="w-5 h-5" />
-                    </button>
-                  </li>
-                </ul>
+              <div
+                :id="'listRef-' + day.unFormattedDate"
+                class="px-3 flex-1 overflow-y-auto"
+              >
+                <Draggable
+                  class="space-y-3"
+                  :list="cards[day.unFormattedDate]"
+                  group="cards"
+                  item-key="id"
+                  drag-class="drag"
+                  ghost-class="ghost"
+                  tag="ul"
+                  @change="(e) => onChange(day.unFormattedDate, e)"
+                >
+                  <template #item="{ element }">
+                    <CardListItem :key="index" :card="element" />
+                  </template>
+                </Draggable>
+                <ul></ul>
               </div>
             </div>
             <div class="flex pt-3 py-2 pb-3">
               <div class="px-3 w-72">
                 <TodoListCreateForm
                   :date="day.unFormattedDate"
-                  @created="onCardCreated()"
+                  @created="onCardCreated"
                 />
               </div>
             </div>
@@ -109,5 +141,6 @@ function onCardCreated() {
         </div>
       </div>
     </div>
+    <CardListItemModal :card="props.card" />
   </AuthenticatedLayout>
 </template>

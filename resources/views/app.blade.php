@@ -17,7 +17,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased max-h-[100%] overflow-hidden">
+<body class="font-sans antialiased">
     @inertia
 </body>
 
